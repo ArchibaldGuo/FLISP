@@ -55,5 +55,5 @@ Once released, this repository will contain:
 
 If you have any immediate questions regarding the implementation details before the code release, please feel free to contact the authors.
 
-**Authors:** [Your Name/Team Name]  
-**Email:** [Your Email Address]
+**Authors:** Anonymized
+**Email:** Anonymized
