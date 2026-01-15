@@ -4,7 +4,7 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Refactoring-yellow.svg)]()
-[![Video](https://img.shields.io/badge/Video-YouTube-red.svg)](https://youtu.be/TNlqwy9R2z0)
+[![Video](https://img.shields.io/badge/Video-YouTube-red.svg)](https://youtu.be/Pk9ksHcRnnQ)
 [![Dataset](https://img.shields.io/badge/Dataset-Available-green.svg)](#-dataset)
 
 ---
