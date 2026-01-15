@@ -91,13 +91,12 @@ If you have any immediate questions regarding the implementation details before 
 If you find this work useful, please consider citing:
 
 ```bibtex
-@article{guo2025flisp,
+@article{2026flisp,
   title={Large Scale Tunnel Air-Ground Collaboration With FLISP: 
          Fast LiDAR-IMU Synchronized Path Planner},
-  author={Guo, Fenghe and Shen, Runjie and Sun, Chenyang and 
-          Zhang, Junrui and Zhan, Quanxi and Wang, Yongchun and Zhang, Junjie},
+  author={Anonimized for review},
   journal={IEEE Transactions on Field Robotics},
-  year={2025},
+  year={2026},
   note={Under Review}
 }
 ```
