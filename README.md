@@ -4,7 +4,7 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Refactoring-yellow.svg)]()
-[![Video](https://img.shields.io/badge/Video-YouTube-red. svg)](https://youtu.be/TNlqwy9R2z0)
+[![Video](https://img.shields.io/badge/Video-YouTube-red.svg)](https://youtu.be/TNlqwy9R2z0)
 [![Dataset](https://img.shields.io/badge/Dataset-Available-green.svg)](#-dataset)
 
 ---
@@ -81,8 +81,8 @@ Once the paper is accepted, this repository will be updated with:
 
 If you have any immediate questions regarding the implementation details before the code release, please feel free to contact the authors.
 
-**Authors:** Fenghe Guo, Runjie Shen, et al.  
-**Email:** shenrunjie@163.com
+**Authors:** Anonimized for review
+**Email:** Anonimized for review
 
 ---
 
