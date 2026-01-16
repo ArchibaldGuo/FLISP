@@ -15,7 +15,7 @@
 
 To ensure the reproducibility of our results and provide a user-friendly experience for the community, we are currently:
 1.  **Refactoring the Codebase:** Converting the original field-deployment engineering code into a standard, clean **ROS package**.
-2.  ~~Processing the Dataset~~ ✅ **Dataset Released:** Representative segments capturing geometric degeneracy are now publicly available (see below).
+2.  ✅ **Dataset Released:** Representative segments capturing geometric degeneracy are now publicly available (see below).
 
 **The complete FLISP planner implementation will be fully released here upon the acceptance/publication of the associated paper.**
 
@@ -82,6 +82,7 @@ Once the paper is accepted, this repository will be updated with:
 If you have any immediate questions regarding the implementation details before the code release, please feel free to contact the authors.
 
 **Authors:** Anonimized for review
+
 **Email:** Anonimized for review
 
 ---
