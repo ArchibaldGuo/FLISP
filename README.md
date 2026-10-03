@@ -1,103 +1,196 @@
-# FLISP:  Fast LiDAR-IMU Synchronized Path Planner
+# FLISP: Fast LiDAR-IMU Synchronized Path Planner
 
-**A Mapless Planning Framework for Cooperative UGV-UAV Inspection Teams in Large-Scale Tunnels**
+**A mapless planning framework for cooperative UGV-UAV inspection teams in
+large-scale tunnels**
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Refactoring-yellow.svg)]()
+[![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](../package.xml)
+[![ROS](https://img.shields.io/badge/ROS1-catkin-blue.svg)](https://www.ros.org/)
 [![Video](https://img.shields.io/badge/Video-YouTube-red.svg)](https://youtu.be/Pk9ksHcRnnQ)
-[![Dataset](https://img.shields.io/badge/Dataset-Available-green.svg)](#-dataset)
+[![Dataset](https://img.shields.io/badge/Dataset-Available-green.svg)](#dataset)
 
----
+FLISP is a mapless, LiDAR-IMU-based path planner for heterogeneous UGV-UAV
+inspection teams operating in large-scale, feature-degraded tunnels. A
+UGV-mounted LiDAR-IMU suite provides the local geometric perception used to
+generate a ground path and a synchronized aerial reference path.
 
-## ⚠️ Repository Status: Under Preparation
+This repository contains the open-source ROS1 planner layer. Downstream
+trajectory generation, low-level controllers, hardware drivers, and the full
+field-data processing pipeline are outside the scope of this package.
 
-> **The full source code is currently being refactored for public release.  However, the benchmark dataset is now available for download.**
+## Package Contents
 
-To ensure the reproducibility of our results and provide a user-friendly experience for the community, we are currently:
-1.  **Refactoring the Codebase:** Converting the original field-deployment engineering code into a standard, clean **ROS package**.
-2.  ✅ **Dataset Released:** Representative segments capturing geometric degeneracy are now publicly available (see below).
+The package provides two ROS nodes:
 
-**The complete FLISP planner implementation will be fully released here upon the acceptance/publication of the associated paper.**
+- `flisp_ugv_planner_node`: tunnel geometry extraction, dynamic binning,
+  boundary fitting, path robustification, and optional Firefly obstacle
+  avoidance.
+- `flisp_uav_planner_node`: hierarchical UAV path generation from the UGV path,
+  communication-sphere constraints, and optional dynamic-sampling obstacle
+  avoidance.
 
----
+The implementation is organized as follows:
 
-## 📦 Dataset
+```text
+flisp_planner/
+├── config/       # YAML parameter files
+├── docs/         # Paper-to-code consistency notes
+├── include/      # Public C++ interfaces
+├── launch/       # ROS launch files
+└── src/          # Planner library and ROS node entry points
+```
 
-We provide two representative rosbag segments captured in the operational hydropower tunnel.  These datasets are specifically designed to demonstrate the **geometric degeneracy** that causes SLAM algorithms to fail in featureless, curved tunnel environments. 
+## Requirements
 
-| Dataset | Sensor | Duration | Distance | Description | Download |
-|---------|--------|----------|----------|-------------|----------|
-| **64-beam** | Ouster OS1-64 | 350 s | ~140 m | Standard navigation LiDAR (mounted on UGV) | [Google Drive](https://drive.google.com/file/d/1GOUsW5KOHc8xXOUyykQc3UPbKKkv7vt9/view?usp=sharing) |
-| **128-beam** | Ouster OS0-128 | 150 s | ~80 m | High-density LiDAR (handheld control experiment) | [Google Drive](https://drive.google.com/file/d/1dydLKqrZYZDeT-akQVrCJ1_RhrIlEr2I/view?usp=sharing) |
+- ROS1 with `catkin`
+- C++17 compiler
+- PCL
+- Eigen3
+- ROS packages: `roscpp`, `sensor_msgs`, `nav_msgs`, `geometry_msgs`,
+  `pcl_ros`, `pcl_conversions`, `tf2`, and `visualization_msgs`
 
-### Dataset Details
+## Build
 
-- **Sensor Configuration:** Each rosbag contains synchronized 3D LiDAR point clouds and IMU data. 
-- **Environment:** A 13-meter diameter hydropower tunnel with curved geometry and featureless, homogeneous surfaces.
-- **Purpose:** These segments capture the critical trajectory from initialization (near the entrance gate) through the point where state-of-the-art LIO algorithms (e.g., LIO-SAM, Fast-LIO2) begin to experience significant drift due to the loss of geometric anchors. 
-- **Note:** The 64-beam dataset starts at t=35s to reduce file size; the paper's experiments use t=40s for IMU bias convergence.
+Place this package in a catkin workspace:
 
-### Suggested Use
+```bash
+cd ~/catkin_ws/src
+# Copy or clone flisp_planner into this directory.
 
-We invite the community to:
-1. Verify the **"Geometric Anchor" hypothesis** described in our paper by running SLAM algorithms on these segments.
-2. Benchmark novel degeneracy-aware localization methods against this challenging dataset.
-3. Use the data for developing and testing mapless navigation approaches.
+cd ..
+catkin_make
+source devel/setup.bash
+```
 
----
+## Run
 
-## 📺 Demonstration
+The default topics match the original field deployment:
 
-Click the image below to watch the field experiment demonstration: 
+- Input point cloud: `/ouster/points`
+- Input IMU: `/ouster/imu`
+- UGV path: `/path`
+- UAV reference path: `/path_ugv_simplist`
+- UAV path: `/path_uav`
+- UGV runtime: `/runtime_ugv`
+- UAV runtime: `/runtime_uav`
 
-[![FLISP Demo Video](https://img.youtube.com/vi/TNlqwy9R2z0/0.jpg)](https://youtu.be/Pk9ksHcRnnQ)
+Start both planners with:
 
----
+```bash
+roslaunch flisp_planner flisp_planner.launch
+```
 
-## 📖 Abstract
+The default configuration is intended to match the full-length field run,
+where no artificial obstacles are present:
 
-Hydropower tunnel inspection is critical for infrastructure integrity yet remains prohibitively inefficient and hazardous using manual methods. To bridge this gap, we propose **FLISP** (Fast LiDAR-IMU Synchronized Path Planner), a novel **mapless** planning framework engineered for cooperative UGV-UAV inspection teams. 
+- Obstacle avoidance is disabled.
+- The original inverse dynamic-binning rule is enabled.
+- Legacy path-robustification behavior is preserved.
+- UAV post-smoothing is disabled to match the original published path.
 
-Diverging from computationally expensive map-centric paradigms, FLISP features a unified, lightweight architecture where a single UGV-mounted LiDAR-IMU suite drives synchronized trajectory generation for the heterogeneous team. The framework integrates:
-* A **hierarchical polynomial fitting strategy** that decouples path generation from global state estimation to eliminate drift.
-* A **geometric Firefly Algorithm** for robust UGV traversal on uneven terrain. 
-* A **dynamic optimization solver** ensuring UAV compliance with strict infrastructure constraints.
+The main configuration files are:
 
-Experimental results in a 1.2 km operational tunnel confirm a **100% success rate** with a system latency of ~7 ms.
+- `config/ugv_planner.yaml`
+- `config/uav_planner.yaml`
 
----
+## Obstacle Experiments
 
-## 🔜 Planned Release Content
+Obstacle avoidance is available for dedicated obstacle experiments. Enable both
+UGV and UAV avoidance with:
 
-Once the paper is accepted, this repository will be updated with:
-* **`flisp_planner`**: The core C++ implementation of the planner. 
-* **`flisp_msgs`**: Custom ROS messages for UGV-UAV coordination. 
-* **`launch`**: Example launch files to run the simulation and replay field data.
-* **`tunnel_dataset`**: The complete 1.2 km tunnel dataset (currently, representative segments are available above).
+```bash
+roslaunch flisp_planner flisp_planner.launch \
+  enable_obstacle_avoidance:=true
+```
 
----
+Enable only one platform if needed:
 
-## 📧 Contact
+```bash
+roslaunch flisp_planner flisp_planner.launch \
+  enable_ugv_obstacle_avoidance:=true
 
-If you have any immediate questions regarding the implementation details before the code release, please feel free to contact the authors.
+roslaunch flisp_planner flisp_planner.launch \
+  enable_uav_obstacle_avoidance:=true
+```
 
-**Authors:** Anonimized for review
+Keeping this feature disabled during obstacle-free field runs avoids false
+avoidance caused by point-cloud clutter or reflections.
 
-**Email:** Anonimized for review
+## Compatibility Profiles
 
----
+The default YAML values prioritize compatibility with the original
+deployment-oriented implementation:
 
-## 📄 Citation
+- `bin_step_model: legacy_inverse` uses
+  `3 / (1 + 2 * abs(yaw))`.
+- `outlier_mode: legacy_smoothing` preserves the original local smoothing
+  behavior. Use `paper_bayesian` for the stricter Bayesian model described in
+  the paper.
+- `reference_extra_altitude_offset: 2.0` preserves the original UAV altitude
+  convention.
+- `enable_post_smoothing: false` preserves the original UAV publication
+  behavior.
 
-If you find this work useful, please consider citing:
+The mapping between implementation modules and the equations in the paper is
+documented in [docs/paper_consistency.md](docs/paper_consistency.md).
+
+## Dataset
+
+Two representative rosbag segments from the operational hydropower tunnel are
+available for download:
+
+| Dataset | Sensor | Duration | Distance | Description |
+|---|---|---:|---:|---|
+| 64-beam | Ouster OS1-64 | 350 s | approximately 140 m | Standard navigation LiDAR mounted on the UGV |
+| 128-beam | Ouster OS0-128 | 150 s | approximately 80 m | High-density handheld control experiment |
+
+- [64-beam rosbag](https://drive.google.com/file/d/1GOUsW5KOHc8xXOUyykQc3UPbKKkv7vt9/view?usp=sharing)
+- [128-beam rosbag](https://drive.google.com/file/d/1dydLKqrZYZDeT-akQVrCJ1_RhrIlEr2I/view?usp=sharing)
+
+Each segment contains synchronized 3D LiDAR and IMU data from a
+feature-degraded, curved hydropower tunnel. The 64-beam dataset starts at
+approximately 35 s to reduce file size; the paper experiments use
+approximately 40 s after IMU bias convergence.
+
+These data can be used to:
+
+1. Study LiDAR-inertial degeneracy in featureless curved tunnels.
+2. Benchmark map-based and mapless localization or planning methods.
+3. Replay the FLISP planner with the published topic configuration.
+
+The complete 1.2 km field dataset is not included in this repository.
+
+## Demonstration
+
+[![FLISP field demonstration](https://img.youtube.com/vi/Pk9ksHcRnnQ/0.jpg)](https://youtu.be/Pk9ksHcRnnQ)
+
+## Abstract
+
+Hydropower tunnel inspection is critical for infrastructure integrity yet
+remains inefficient and hazardous using manual methods. FLISP is a mapless
+planning framework for cooperative UGV-UAV inspection. A single UGV-mounted
+LiDAR-IMU suite drives synchronized path generation for both platforms.
+Platform-specific solvers combine geometric fitting, Firefly-based UGV obstacle
+avoidance, and dynamic UAV path optimization. Experiments in a 1.2 km
+operational tunnel demonstrate a 100% success rate with approximately 7 ms
+planning latency.
+
+## Citation
+
+If you use this code or dataset, please cite:
 
 ```bibtex
-@article{2026flisp,
-  title={Large Scale Tunnel Air-Ground Collaboration With FLISP: 
-         Fast LiDAR-IMU Synchronized Path Planner},
-  author={Anonimized for review},
-  journal={IEEE Transactions on Field Robotics},
-  year={2026},
-  note={Under Review}
+@article{guo2026flisp,
+  title   = {Large Scale Tunnel Air-Ground Collaboration With FLISP:
+             Fast LiDAR-IMU Synchronized Path Planner},
+  author  = {Guo, Fenghe and Shen, Runjie and Sun, Chenyang and Zhang, Junrui
+             and Zhan, Quanxi and Wang, Yongchun and Zhang, Junjie},
+  journal = {IEEE Transactions on Field Robotics},
+  year    = {2026},
+  note    = {Accepted for publication}
 }
 ```
+
+## Contact
+
+For questions about the planner or dataset, please contact the authors listed
+in the associated paper.
