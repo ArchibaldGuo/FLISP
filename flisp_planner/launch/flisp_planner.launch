@@ -1,0 +1,27 @@
+<launch>
+  <arg name="ugv_config" default="$(find flisp_planner)/config/ugv_planner.yaml" />
+  <arg name="uav_config" default="$(find flisp_planner)/config/uav_planner.yaml" />
+  <arg name="run_ugv" default="true" />
+  <arg name="run_uav" default="true" />
+  <arg name="enable_obstacle_avoidance" default="false" />
+  <arg name="enable_ugv_obstacle_avoidance" default="$(arg enable_obstacle_avoidance)" />
+  <arg name="enable_uav_obstacle_avoidance" default="$(arg enable_obstacle_avoidance)" />
+
+  <node if="$(arg run_ugv)"
+        pkg="flisp_planner"
+        type="flisp_ugv_planner_node"
+        name="flisp_ugv_planner"
+        output="screen">
+    <rosparam command="load" file="$(arg ugv_config)" />
+    <param name="enable_obstacle_avoidance" value="$(arg enable_ugv_obstacle_avoidance)" />
+  </node>
+
+  <node if="$(arg run_uav)"
+        pkg="flisp_planner"
+        type="flisp_uav_planner_node"
+        name="flisp_uav_planner"
+        output="screen">
+    <rosparam command="load" file="$(arg uav_config)" />
+    <param name="enable_obstacle_avoidance" value="$(arg enable_uav_obstacle_avoidance)" />
+  </node>
+</launch>

@@ -1,0 +1,70 @@
+point_cloud_topic: /ouster/points
+imu_topic: /ouster/imu
+ugv_path_topic: /path
+uav_reference_path_topic: /path_ugv_simplist
+runtime_topic: /runtime_ugv
+output_frame: os_sensor
+uav_reference_frame: UGV/odom
+
+yaw_crop_min_x: -2.0
+yaw_crop_max_x: 2.0
+yaw_crop_min_y: -100.0
+yaw_crop_max_y: 100.0
+yaw_crop_min_z: 2.0
+yaw_crop_max_z: 9.0
+normal_neighbors: 15
+normal_samples: 30
+
+# Paper Eq. 3. Defaults preserve the original 3 m straight-section binning
+# while increasing resolution in curves.
+bin_c1: 3.0
+bin_c2: 1.5
+bin_kappa: 1.0
+bin_lambda: 0.0
+bin_c3: 0.5
+bin_mu: 0.2
+min_bin_step: 0.3
+max_bin_step: 3.0
+bin_step_model: legacy_inverse
+preview_distance: 80.0
+edge_jump_threshold: 1.5
+curvature_variance_threshold: 0.001
+polynomial_degree: 2
+linear_extension_points: 200
+polynomial_extension_points: 50
+
+ground_fit_min_x: -5.0
+ground_fit_max_x: -3.0
+ground_fit_step: 0.5
+uav_reference_height: 5.0
+
+yaw_shrink_factor: 0.3
+roll_shrink_factor: 0.1
+outlier_prior: 0.1
+normal_noise_std: 0.05
+outlier_noise_std: 0.5
+outlier_probability_threshold: 0.75
+outlier_mode: legacy_smoothing
+collinear_distance_threshold: 0.05
+
+enable_obstacle_avoidance: false
+obstacle_detection_fraction: 0.4
+obstacle_box_half_width: 0.5
+obstacle_box_z_offset: 0.8
+obstacle_box_min_z: 0.0
+obstacle_box_max_z: 0.5
+vehicle_width: 0.6
+safety_margin: 0.3
+max_tilt_ratio: 0.35
+firefly_count: 50
+firefly_iterations: 80
+firefly_alpha: 0.5
+firefly_beta0: 2.8
+firefly_gamma: 1.5
+firefly_alpha_decay: 0.95
+tilt_weight: 2.0
+center_weight: 0.5
+collision_penalty_multiplier: 5.0
+local_smooth_radius: 2
+smooth_transition_points: 10
+random_seed: 7

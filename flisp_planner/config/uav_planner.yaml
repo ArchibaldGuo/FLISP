@@ -1,0 +1,31 @@
+ugv_path_topic: /path
+reference_path_topic: /path_ugv_simplist
+point_cloud_topic: /ouster/points
+output_path_topic: /path_uav
+runtime_topic: /runtime_uav
+output_frame: ""
+
+communication_radius: 2.5
+safe_radius: 1.5
+min_altitude_offset: 2.0
+reference_extra_altitude_offset: 2.0
+
+cloud_crop_margin_multiplier: 2.0
+path_crop_margin: 0.0
+voxel_leaf_size_near_path: 0.1
+voxel_leaf_size_global: 0.2
+downsample_threshold: 1000
+
+enable_obstacle_avoidance: false
+sample_count: 24
+optimization_iterations: 5
+sampling_radius_decay: 0.7
+safety_weight: 2.5
+smoothness_weight: 1.2
+progress_weight: 0.8
+height_weight: 0.5
+blocked_segment_penalty: 25.0
+
+enable_post_smoothing: false
+simplify_epsilon: 0.05
+smooth_window_size: 5
