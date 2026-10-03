@@ -5,6 +5,8 @@ large-scale tunnels**
 
 [![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](../package.xml)
 [![ROS](https://img.shields.io/badge/ROS1-catkin-blue.svg)](https://www.ros.org/)
+[![Paper](https://img.shields.io/badge/Paper-IEEE%20TFR-blue.svg)](https://doi.org/10.1109/TFR.2026.3697669)
+[![arXiv](https://img.shields.io/badge/arXiv-2606.25393-b31b1b.svg)](https://arxiv.org/abs/2606.25393)
 [![Video](https://img.shields.io/badge/Video-YouTube-red.svg)](https://youtu.be/Pk9ksHcRnnQ)
 [![Dataset](https://img.shields.io/badge/Dataset-Available-green.svg)](#dataset)
 
@@ -176,17 +178,31 @@ planning latency.
 
 ## Citation
 
-If you use this code or dataset, please cite:
+The published IEEE reference is:
+
+> F. Guo et al., "Large-Scale Tunnel Air–Ground Collaboration With FLISP:
+> Fast LiDAR-IMU Synchronized Path Planner," in *IEEE Transactions on Field
+> Robotics*, vol. 3, pp. 494-517, 2026, doi:
+> [10.1109/TFR.2026.3697669](https://doi.org/10.1109/TFR.2026.3697669).
+
+An open-access preprint is available on
+[arXiv:2606.25393](https://arxiv.org/abs/2606.25393)
+([PDF](https://arxiv.org/pdf/2606.25393)).
+
+For BibTeX:
 
 ```bibtex
 @article{guo2026flisp,
-  title   = {Large Scale Tunnel Air-Ground Collaboration With FLISP:
+  title   = {Large-Scale Tunnel Air--Ground Collaboration With FLISP:
              Fast LiDAR-IMU Synchronized Path Planner},
   author  = {Guo, Fenghe and Shen, Runjie and Sun, Chenyang and Zhang, Junrui
              and Zhan, Quanxi and Wang, Yongchun and Zhang, Junjie},
   journal = {IEEE Transactions on Field Robotics},
+  volume  = {3},
+  pages   = {494--517},
   year    = {2026},
-  note    = {Accepted for publication}
+  doi     = {10.1109/TFR.2026.3697669},
+  url     = {https://doi.org/10.1109/TFR.2026.3697669}
 }
 ```
 
